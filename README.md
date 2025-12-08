@@ -1,0 +1,56 @@
+
+
+A tentative implementation of Crac Resource management.
+
+
+Liberica JDK version 17.0.17-crac downloaded from https://bell-sw.com
+
+Tested on Debian 13 and "criu" package version 4.1.1.1 installed.
+
+HACK: the criu binary that comes with Liberica JDK in
+$JAVA_HOME/lib/criu was somehow defective. I had to replace it with
+/usr/sbin/criu by copying to $JAVA_HOME/lib/criu
+
+
+I was not able to run the test without root priviledges.
+
+
+
+> mvn install
+> mkdir ./checkpoint-dir
+
+> sudo $JAVA_HOME/bin/java -XX:CRaCCheckpointTo=./checkpoint-dir/ -jar target/logback-crac-demo-1.0-SNAPSHOT-all.jar
+
+Sample output
+
+Crac Logback integration test
+Logback configuration took 116 ms
+Registering LogbackCracDelegate with CRaC...
+LogbackCracDelegate instantiated
+CRac 19:08:45.014 - Crac Logback integration test logging...1
+CRac 19:08:46.015 - Crac Logback integration test logging...2
+CRac 19:08:47.015 - Crac Logback integration test logging...3
+CRac 19:08:48.016 - Crac Logback integration test logging...4
+
+
+from another shell
+> sudo $JAVA_HOME/jdk-17.0.17-crac/bin/jcmd target/logback-crac-demo-1.0-SNAPSHOT-all.jar  JDK.checkpoint
+
+Sample output:
+
+1551025:
+CR: Checkpoint ...
+
+
+from the first shell
+> sudo $JAVA_HOME/bin/java -XX:CRaCRestoreFrom=./checkpoint-dir 
+
+Sample output
+
+afterRestore called - Logback restoring from model...
+Logback restore from model took 3 ms
+CRac 19:09:20.775 - Crac Logback integration test logging...7
+CRac 19:09:21.775 - Crac Logback integration test logging...8
+CRac 19:09:22.776 - Crac Logback integration test logging...9
+
+
