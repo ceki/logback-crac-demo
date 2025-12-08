@@ -1,30 +1,39 @@
 
 
-## A tentative implementation of Crac Resource management in conjuction with Logback.
+## A tentative implementation of CRaC Resource management in conjuction with Logback.
 
-During parsing of logback.xml configuration files, logback transforms the XML into a model tree. The model tree does not hold any references to the original XML.
+During parsing of *logback.xml* configuration files, logback transforms the XML into a model tree. The model tree does not hold any references to the original XML.
 
-Once created, the model tree is then handed to a processor which can configure logback or perform some other type of processing. 
-As an example of "" other processing, [logback-tyler](https://github.com/qos-ch/logback-tyler) transforms the model tree into a Java file.
+Once created, the model tree is handed to a model processor which configures logback. Other processors can perform other types of processing. 
+As an example of "other processing", [logback-tyler](https://github.com/qos-ch/logback-tyler) transforms the model tree into a Java file.
 
 If the XML file can be parsed without errors, the model tree it is stored in the `LoggerContext` under the key "CoreConstants.SAFE_JORAN_CONFIGURATION"
 
-The Crac resource [LogbackCracDelegate](https://github.com/ceki/logback-crac-demo/blob/main/src/main/java/ch/qos/logback/crac/LogbackCracDelegate.java) retreives the model tree in when `beforeCheckpoint` method is called.
+In light of these background, the [LogbackCracDemo](https://github.com/ceki/logback-crac-demo/blob/main/src/main/java/ch/qos/logback/crac/LogbackCracDemo.java) application demonstrates a possible technique for integrating logback and CRaC. 
 
-When `afterRestore` method hand the previously saved model to `JoranConfigurator.processModel()` method. 
-Proceding this way all properties of the `LoggerContext` that originated in the logback.xml file are restored.
+### Quick overview of `LogbackCracDemo`
 
-### Preliminary remarks:
+After reading the configuration file, `LogbackCracDemo` instantiates the CRaC resource [LogbackCracDelegate](https://github.com/ceki/logback-crac-demo/blob/main/src/main/java/ch/qos/logback/crac/LogbackCracDelegate.java) and registers it with CraC's global context.
 
-Liberica JDK version 17.0.17-crac downloaded from https://bell-sw.com
+`LogbackCracDelegate` retreives the model tree  when its `beforeCheckpoint` method is called. The model tree is saved in an instance variable.
+
+At restoration time, the `afterRestore()` method of `LogbackCracDelegate` hands the previously saved model to the `JoranConfigurator.processModel()` method which configuires the logback context anew.
+
+Proceding this way, all properties of the `LoggerContext` that originated in the *logback.xml* file are restored in a few milli-seconds.
+
+### Other remarks:
+
+Test were performed with Liberica JDK version 17.0.17-crac downloaded from https://bell-sw.com
 
 Tested on Debian 13 and "criu" package version 4.1.1.1 installed.
 
-HACK: the criu binary that comes with Liberica JDK in
+HACK: the `criu` binary that comes with Liberica JDK in
 $JAVA_HOME/lib/criu was somehow defective. I had to replace it with
 /usr/sbin/criu by copying to $JAVA_HOME/lib/criu
 
 I was not able to run the test without root priviledges.
+
+### Testing yourself
 
 Commands to run
 
@@ -70,6 +79,6 @@ CRac 19:09:21.775 - Crac Logback integration test logging...8
 CRac 19:09:22.776 - Crac Logback integration test logging...9
 ```
 
-Note that while the initial configuration tool *116m*s, the restoration from the model only took *3ms*.
-While 
+Note that while the initial configuration took **116ms**, the restoration from the model only took **3ms**.
+
 
