@@ -29,9 +29,9 @@ Tested on Debian 13 and "criu" package version 4.1.1.1 installed.
 
 HACK: the `criu` binary that comes with Liberica JDK in
 $JAVA_HOME/lib/criu was somehow defective. I had to replace it with
-/usr/sbin/criu by copying to $JAVA_HOME/lib/criu
+/usr/sbin/criu by copying it to $JAVA_HOME/lib/criu
 
-I was unable to run the test without **root priviledges**, hence the `sudo` (see below).
+Moreover, I was unable to run the test without **root priviledges**, hence the `sudo` (see below).
 
 ### Testing yourself
 
@@ -83,6 +83,7 @@ CRac 19:09:22.776 - Crac Logback integration test logging...9
 ```
 
 Note that while the initial configuration took **116ms**, the restoration from the model only took **3ms**.
+
 
 
 
