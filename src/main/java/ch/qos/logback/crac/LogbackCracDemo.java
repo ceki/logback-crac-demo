@@ -6,14 +6,23 @@ import org.crac.Core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Demo class for testing CRAC integration with Logback.
+ * This class demonstrates how to register the LogbackCracDelegate and perform logging.
+ */
 public class LogbackCracDemo {
 
-
+    /**
+     * Main method to run the CRAC Logback integration test.
+     * @param args command line arguments
+     * @throws JoranException if there's an error in Joran configuration
+     */
     public static void main(String[] args) throws JoranException {
         System.out.println("Crac Logback integration test");
 
 
         long time0 = System.currentTimeMillis();
+        // Next call reads logback.xml configuration file
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         long time1 = System.currentTimeMillis();
         System.out.println("Logback configuration took " + (time1 - time0) + " ms");

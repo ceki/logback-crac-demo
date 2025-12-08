@@ -9,16 +9,32 @@ import org.crac.Resource;
 
 import static ch.qos.logback.core.CoreConstants.SAFE_JORAN_CONFIGURATION;
 
+/**
+ * Delegate for handling CRAC (Checkpoint/Restore in Application Container) operations for Logback.
+ * This class implements the Resource interface to manage the state of the LoggerContext during
+ * checkpoint and restore phases.
+ */
 public class LogbackCracDelegate implements Resource {
 
+    /** The logger context managed by this delegate. */
     LoggerContext loggerContext;
+    /** The model representing the configuration, saved during checkpoint. */
     Model topModel;
 
+    /**
+     * Constructs a new LogbackCracDelegate with the given LoggerContext.
+     * @param loggerContext the logger context to manage
+     */
     LogbackCracDelegate(LoggerContext loggerContext) {
         System.out.println("LogbackCracDelegate instantiated");
         this.loggerContext = loggerContext;
     }
 
+    /**
+     * Called before the checkpoint is taken. Stops the logger context and saves the configuration model.
+     * @param context the CRAC context
+     * @throws Exception if an error occurs during the operation
+     */
     @Override
     public void beforeCheckpoint(Context<? extends Resource> context) throws Exception {
         long beforeStop = System.currentTimeMillis();
@@ -30,6 +46,11 @@ public class LogbackCracDelegate implements Resource {
 
     }
 
+    /**
+     * Called after the restore. Restarts the logger context and reconfigures it from the saved model.
+     * @param context the CRAC context
+     * @throws Exception if an error occurs during the operation
+     */
     @Override
     public void afterRestore(Context<? extends Resource> context) throws Exception {
         System.out.println("afterRestore called - Logback restoring from model...");
