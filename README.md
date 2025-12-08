@@ -1,6 +1,6 @@
 
 
-## A tentative implementation of CRaC Resource management in conjuction with Logback.
+## A tentative implementation of CRaC Resource management in conjunction with Logback.
 
 During parsing of *logback.xml* configuration files, logback transforms the XML into a model tree. The model tree does not hold any references to the original XML.
 
@@ -83,6 +83,7 @@ CRac 19:09:22.776 - Crac Logback integration test logging...9
 ```
 
 Note that while the initial configuration took **116ms**, the restoration from the model only took **3ms**.
+
 
 
 
