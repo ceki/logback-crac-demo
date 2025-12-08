@@ -31,13 +31,14 @@ HACK: the `criu` binary that comes with Liberica JDK in
 $JAVA_HOME/lib/criu was somehow defective. I had to replace it with
 /usr/sbin/criu by copying to $JAVA_HOME/lib/criu
 
-I was not able to run the test without root priviledges.
+I was unable to run the test without **root priviledges**, hence the `sudo` (see below).
 
 ### Testing yourself
 
 Commands to run
 
 ```
+export JAVA_HOME=/some/path/jdk-17.0.17-crac
 mvn install   # creates target/logback-crac-demo-1.0-SNAPSHOT-all.jar 
 mkdir ./checkpoint-dir`
 sudo $JAVA_HOME/bin/java -XX:CRaCCheckpointTo=./checkpoint-dir/ -jar target/logback-crac-demo-1.0-SNAPSHOT-all.jar`
@@ -57,7 +58,8 @@ CRac 19:08:48.016 - Crac Logback integration test logging...4
 
 from another shell
 ```
-> sudo $JAVA_HOME/jdk-17.0.17-crac/bin/jcmd target/logback-crac-demo-1.0-SNAPSHOT-all.jar  JDK.checkpoint
+> export JAVA_HOME=/some/path/jdk-17.0.17-crac
+> sudo $JAVA_HOME/bin/jcmd target/logback-crac-demo-1.0-SNAPSHOT-all.jar  JDK.checkpoint
 ```
 Sample output:
 ```
@@ -66,7 +68,8 @@ CR: Checkpoint ...
 ```
 
 from the first shell
-```> sudo $JAVA_HOME/bin/java -XX:CRaCRestoreFrom=./checkpoint-dir 
+```
+> sudo $JAVA_HOME/bin/java -XX:CRaCRestoreFrom=./checkpoint-dir 
 ```
 
 Sample output
@@ -80,5 +83,6 @@ CRac 19:09:22.776 - Crac Logback integration test logging...9
 ```
 
 Note that while the initial configuration took **116ms**, the restoration from the model only took **3ms**.
+
 
 
