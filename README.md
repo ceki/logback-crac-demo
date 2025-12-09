@@ -27,7 +27,7 @@ Tested on Debian 13 and "criu" package version 4.1.1.1 installed.
 
 Workaround: the `criu` binary that comes with Liberica JDK in
 $JAVA_HOME/lib/criu was somehow defective. I had to replace it with
-/usr/sbin/criu by copying it to $JAVA_HOME/lib/criu
+/usr/sbin/criu (part of the criu package) by copying to and overwriting $JAVA_HOME/lib/criu
 
 Moreover, I was unable to run the test without **root privileges**, hence the `sudo` (see below).
 
