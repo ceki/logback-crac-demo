@@ -36,7 +36,7 @@ Moreover, I was unable to run the test without **root privileges**, hence the `s
 Commands to run
 
 ```
-export JAVA_HOME=/some/path/jdk-17.0.17-crac
+export JAVA_HOME=/some/path/jdk-17.0.17-crac   # JDK 21-crac would work just as well
 mvn install   # creates target/logback-crac-demo-1.0-SNAPSHOT-all.jar
 mkdir ./checkpoint-dir
 sudo $JAVA_HOME/bin/java -XX:CRaCCheckpointTo=./checkpoint-dir/ -jar target/logback-crac-demo-1.0-SNAPSHOT-all.jar
